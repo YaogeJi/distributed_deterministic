@@ -15,7 +15,7 @@ sweep_configuration = {
         'num_dimensions':{'values':[400]},
         'sparsity':{'values':[5]},
         'num_nodes': {'values':[50]},
-        'network': {'values':['complete_graph']},
+        'network': {'values':['star_graph', 'path_graph']},
         "mixing": {'values':['lazy_metropolis']},
         # 'net_arg': {'values':[0.1]},
         # 'connectivity': {'values':[0.872]},
@@ -24,7 +24,6 @@ sweep_configuration = {
         'constraint': {'values': ['lagrangian']},
         "lmda": {'values': [0.025]},
         'gamma': {'values': [0.0004, 0.00045, 0.0005, 0.00055, 0.0006, 0.00065, 0.0007]},
-        'network': {'values':['complete_graph']},
         'centerized_loss': {'values': [-4.541]},
         'max_iter': {'values': [50000]}
     }
