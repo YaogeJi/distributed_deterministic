@@ -3,7 +3,7 @@ import numpy as np
 
 sweep_configuration = {
     'method': 'grid',
-    'name': 'centralized baseline',
+    'name': 'centralized baseline d400',
     'entity': 'yaoji',
     'program': 'main.py',
     'metric': {
@@ -19,10 +19,13 @@ sweep_configuration = {
         "mixing": {'values':['lazy_metropolis']},
         # 'net_arg': {'values':[0.1]},
         # 'connectivity': {'values':[0.872]},
+        "solver": {"values": ["cta"]},
         "radius_const": {'values': [1.01]},
         'constraint': {'values': ['lagrangian']},
-        "lmda": {'values': [0.027,0.030,0.033,0.0036]},
-        'gamma': {'values': [0.005, 0.01, 0.02, 0.05]},
+        "lmda": {'values': [0.024, 0.023, 0.022, 0.021, 0.020]},
+        'gamma': {'values': [0.02,0.03,0.04]},
+        'network': {'values':['complete_graph']},
+        'centerized_loss': {'values': [-4.541]},
         'max_iter': {'values': [1000]}
     }
 }

@@ -27,11 +27,11 @@ parser.add_argument("-p", "--probability", default=1, type=float)
 parser.add_argument("--rand_geo_radius", default=1, type=float)
 parser.add_argument("-rho", "--connectivity", default=0, type=float)
 ## solver
-parser.add_argument("--cta", type=bool, default=True)
+parser.add_argument("--solver", default='cta')
 parser.add_argument("--radius_const", type=float, default=1.01)
 parser.add_argument("--constraint", choices=("lagrangian", "projected"))
 parser.add_argument("--lmda", default=1, type=float)
-
+parser.add_argument("--centerized_loss", type=float, default=-1e10)
 parser.add_argument("--max_iter", type=int, default=10000)
 # parser.add_argument("--iter_type", choices=("lagrangian", "projected"))
 parser.add_argument("--gamma", type=float)
@@ -41,14 +41,13 @@ parser.add_argument("--scheduler", choices=("const","diminish"), default="const"
 
 ## others
 parser.add_argument("--seed", type=int, default=8989)
-parser.add_argument("--sweep",action='store_true', default=False)
 args = parser.parse_args()
 
 
 def main():
     # register wandb
     wandb.init(project="distributed_deterministic",
-                   entity="yaoji" if not args.sweep else None,
+                   entity="yaoji",
                    config=vars(args))
     wandb.run.log_code()
     # preprocessing data

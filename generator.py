@@ -20,7 +20,7 @@ class Generator:
         wandb.run.summary["sum of X"] = self.X.sum()
 
     def _init_ground_truth(self):
-        theta = self.rng.normal(1, 1, (self.d, 1))
+        theta = self.rng.normal(0, 1, (self.d, 1))
         theta_abs = np.abs(theta)
         threshold = np.quantile(theta_abs, 1 - self.sparsity / self.d)
         mask = theta_abs > threshold
@@ -35,6 +35,7 @@ class Generator:
             X[:, :, i] = self.k * X[:, :, i - 1] + z[:, :, i]
         epsilon = (self.rng.normal(0, self.noise_dev ** 2, (self.N, 1))).reshape(self.m, self.n, 1)
         Y = X @ self.theta + epsilon
+        print(X.shape, Y.shape)
         return X, Y
         
     def __len__(self):

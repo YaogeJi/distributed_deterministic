@@ -18,23 +18,23 @@ class NetworkSolver:
         critical_iteration = []
         # iterates!
         while self._round < self.args.max_iter:
-            if self.args.cta:
-                self.communicate(self.theta)
+            if self.args.solver == 'cta':
+                self.theta = self.communicate(self.theta)
             for i in range(self.args.local_computation):
                 self.compute(X, Y)
-            if not self.args.cta:
-                self.communicate(self.theta)
-            loss = self.iter_loss()
-            self.log(loss)
-            if len(critical_iteration)==0 and loss - (-4.465) < 0.01:
+            if self.args.solver == 'atc':
+                self.theta = self.communicate(self.theta)
+            log_loss = np.log(self.iter_loss())
+            self.log(log_loss)
+            if len(critical_iteration)==0 and log_loss - (self.args.centerized_loss) < 0.03:
+                wandb.run.summary["critical iteration_0.03"] = self._round
+                critical_iteration.append(self._round)
+            if len(critical_iteration)==1 and log_loss - (self.args.centerized_loss) < 0.02:
+                critical_iteration.append(self._round)
+                wandb.run.summary["critical iteration_0.02"] = self._round
+            if len(critical_iteration)==2 and log_loss - (self.args.centerized_loss) < 0.01:
+                critical_iteration.append(self._round)
                 wandb.run.summary["critical iteration_0.01"] = self._round
-                critical_iteration.append(self._round)
-            if len(critical_iteration)==0 and loss - (-4.465) < 0.005:
-                critical_iteration.append(self._round)
-                wandb.run.summary["critical iteration_0.005"] = self._round
-            if len(critical_iteration)==0 and loss - (-4.465) < 0.001:
-                critical_iteration.append(self._round)
-                wandb.run.summary["critical iteration_0.001"] = self._round
             self._round += 1
     
     def compute(self):
@@ -55,7 +55,7 @@ class NetworkSolver:
         return loss
 
     def log(self, loss):
-        wandb.log({"iter_loss (log scale)": np.log(loss)}, step=self._round)
+        wandb.log({"iter_loss (log scale)": loss}, step=self._round)
 
 
 class NetworkGD(NetworkSolver):
